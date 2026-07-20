@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Environment — never commit real secrets (JWT, VAPID, DB URLs)
+.env
+.env.*
+!.env.example
+
+# Uploaded Surat Permohonan PDFs (runtime data, not source)
+parish-booking-backend/uploads/
+
+# Local tooling
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# Vite / PWA generated artifacts
+parish-booking-frontend/dev-dist/
+
+# Claude Code local state
+.claude/

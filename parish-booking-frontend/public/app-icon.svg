@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" fill="#f3f2f2"/>
+  <circle cx="256" cy="256" r="196" fill="none" stroke="#201e1d" stroke-width="12"/>
+  <!-- Latin cross, serif-weighted to match the Broadsheet masthead mark -->
+  <rect x="232" y="120" width="48" height="272" fill="#201e1d"/>
+  <rect x="160" y="196" width="192" height="48" fill="#201e1d"/>
+  <!-- accent underline, echoing the cyan used across the app -->
+  <rect x="176" y="410" width="160" height="10" fill="#0088b0"/>
+</svg>
