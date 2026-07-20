@@ -12,7 +12,9 @@ export class ScheduleController {
   // The gateway pushes a "schedule:changed" event whenever this data
   // changes, so the display re-fetches this instead of polling blindly.
   @Get('today')
-  getTodaysSchedule() {
-    return this.bookingsService.findTodaysApprovedSchedule();
+  async getTodaysSchedule() {
+    const response = await this.bookingsService.findTodaysApprovedSchedule();
+    console.log('Response:', response);
+    return response;
   }
 }
