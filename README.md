@@ -91,6 +91,19 @@ this repo.
 
 Most of this is already declared in `parish-booking-backend/railway.json`.
 
+**Two monorepo gotchas Railway does not handle implicitly:**
+
+- The **Railway config file does not follow Root Directory**. Set the service's
+  *Config as code* path to the absolute `/parish-booking-backend/railway.json`,
+  or the file is silently ignored.
+- **Watch paths are repo-root-relative**, not root-directory-relative — use
+  `/parish-booking-backend/**`.
+
+Also note the build command must **not** re-run `npm ci`: the builder already
+installs dependencies, and a second install collides with the mounted
+`node_modules/.cache` (`EBUSY`). `prisma` is a runtime dependency, not a dev
+one, because the start command runs `prisma migrate deploy`.
+
 **Volume (required).** Railway's filesystem is ephemeral — without a volume,
 uploaded Surat Permohonan PDFs are deleted on every redeploy. Attach a volume
 and point `UPLOADS_DIR` at its mount path.
