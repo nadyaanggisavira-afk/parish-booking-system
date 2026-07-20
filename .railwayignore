@@ -1,0 +1,17 @@
+# Never upload secrets, dependencies or build output in a CLI deploy.
+# Railway installs and builds from source on its own builders.
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+
+# Runtime data — lives on the mounted volume, not in the image.
+parish-booking-backend/uploads/
+
+# Local tooling
+.claude/
+.git/
+*.log
