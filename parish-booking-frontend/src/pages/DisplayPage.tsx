@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { io } from 'socket.io-client';
 import QRCode from 'react-qr-code';
 import { api, API_BASE, type Booking, type Room } from '../lib/api';
@@ -16,26 +16,41 @@ export function DisplayPage() {
     api.listRooms().then(setRooms);
   }, []);
 
+  const load = useCallback(() => {
+    api.todaysSchedule().then(setBookings);
+  }, []);
+
   useEffect(() => {
-    const load = () => api.todaysSchedule().then(setBookings);
     load();
 
     // The gateway emits schedule:changed the instant an admin approves or
     // rejects something, so this screen re-fetches immediately.
     const socket = io(`${API_BASE}/schedule`, { transports: ['websocket'] });
-    socket.on('connect', () => setConnected(true));
+    socket.on('connect', () => {
+      setConnected(true);
+      // Catch up on anything that changed while the socket was down — those
+      // schedule:changed events were missed entirely.
+      load();
+    });
     socket.on('disconnect', () => setConnected(false));
     socket.on('schedule:changed', load);
 
-    const poll = setInterval(load, 60_000); // fallback if the socket drops silently
     const clock = setInterval(() => setNow(new Date()), 1000);
 
     return () => {
       socket.disconnect();
-      clearInterval(poll);
       clearInterval(clock);
     };
-  }, []);
+  }, [load]);
+
+  // Polling exists only to cover a dead socket. While the socket is connected,
+  // schedule:changed already pushes every update, so polling would just be
+  // redundant traffic from a screen that runs 24/7.
+  useEffect(() => {
+    if (connected) return;
+    const poll = setInterval(load, 60_000);
+    return () => clearInterval(poll);
+  }, [connected, load]);
 
   const { upcoming, finished } = useMemo(() => {
     const sorted = [...bookings].sort(

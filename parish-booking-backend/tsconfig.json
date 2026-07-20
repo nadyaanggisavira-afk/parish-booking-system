@@ -14,6 +14,11 @@
     // dist/src/main.js and broke `node dist/main`.
     "rootDir": "./src",
     "incremental": true,
+    // Kept inside dist/ so nest-cli's "deleteOutDir" wipes the build-info file
+    // along with the output. Left at the project root, it survives the wipe and
+    // tells tsc everything is already built — a clean "0 errors" compile that
+    // emits nothing, leaving `node dist/main` with no module to load.
+    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo",
     "skipLibCheck": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
